@@ -29,7 +29,7 @@ topMenuEl.className = "flex-around"
 for (links of menuLinks){
     let aElement = document.createElement("a");
     aElement.href = links.href;
-    aElement.innerText = links.text;
+    aElement.textContent = links.text;
     topMenuEl.appendChild(aElement);
 }
 
@@ -41,19 +41,75 @@ subMenuEl.style.position = "absolute";
 subMenuEl.style.top = "0";
 
 const showingSubMenu = false;
-const topMenuLinks = document.querySelectorAll("top-menu a");
+const topMenuLinks = document.querySelectorAll("a");
 
 topMenuEl.addEventListener("click", function (event) {
   event.preventDefault();
-  console.log(event.target)
+   
+  console.log(event.target.innerHTML) // Progress Check
 if(event.target.tagName !== "A"){
-  console.log("not 'a' link");
     return;
+}
+if(event.target.innerHTML === "about"){
+  mainEl.innerHTML = '<h1>' + "About" + "</h1>"
+
+}
+if(event.target.classList.contains("active")){ // How to identify active class
+  event.target.classList.remove("active");
+  showingSubMenu = false;
+  subMenuEl.style.top = "0";
+  return;
+}
+
+topMenuLinks.forEach(function(a){  // Removing active class from each "a" element in topMenu
+  a.classList.remove("active");
+});
+
+event.target.classList.add("active"); // Upon click adding active class
+
+const objLink = menuLinks.find(function(a) { // Upon click, objLink value is event target textContent
+  return a.text === event.target.textContent;
+});
+
+const objSubLink = objLink.subLinks;
+console.log(objSubLink) // Showing objLink reveals subLinks upon click 
+
+if(objSubLink){
+ buildSubMenu(objSubLink)
+ subMenuEl.style.top = "100%"
+  changeHeader(event);
+}else {
+  showingSubMenu = false;
+  subMenuEl.style.top = "0%"
 }
 });
 
 
-// const test = document.querySelectorAll()
-// test.addEventListener("click",function(e){
-//   console.log(e)
-// })
+function buildSubMenu(links){
+  subMenuEl.innerHTML = "";
+  links.forEach(function(link){
+    const arraySub = document.createElement("a");
+    arraySub.textContent = link.text;
+    subMenuEl.append(arraySub)
+    
+  }) 
+}
+
+subMenuEl.addEventListener("click", function(event){
+  changeHeader(event)
+  event.preventDefault();
+  console.log(event.target)
+  showingSubMenu = false;
+  subMenuEl.style.top = "0%"
+  topMenuLinks.forEach(function(link) {
+  link.classList.remove('active');
+});
+if(event.target.tagName !== "A"){
+  return;
+    }else{
+  }
+})
+
+function changeHeader(event){
+  mainEl.innerHTML = '<h1>' + event.target.innerHTML + "</h1>"
+}
