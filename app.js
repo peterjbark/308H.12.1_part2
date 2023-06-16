@@ -47,13 +47,12 @@ topMenuEl.addEventListener("click", function (event) {
   event.preventDefault();
    
   console.log(event.target.innerHTML) // Progress Check
+
 if(event.target.tagName !== "A"){
     return;
 }
-if(event.target.innerHTML === "about"){
-  mainEl.innerHTML = '<h1>' + "About" + "</h1>"
+  changeHeader(event);
 
-}
 if(event.target.classList.contains("active")){ // How to identify active class
   event.target.classList.remove("active");
   showingSubMenu = false;
@@ -112,4 +111,7 @@ if(event.target.tagName !== "A"){
 
 function changeHeader(event){
   mainEl.innerHTML = '<h1>' + event.target.innerHTML + "</h1>"
+  if(event.target.innerHTML === "about"){
+    mainEl.innerHTML = '<h1>' + "About" + "</h1>"
+  }
 }
